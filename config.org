@@ -1,12 +1,23 @@
+#+title: Literate Config for DOOM Emacs
+#+PROPERTY: header-args:elisp :tangle ./config.el
+
+* General UI
+** Start/Exit
+#+begin_src elisp
 ;; maximize on startup
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 ;; disable exit confirmation
 (setq confirm-kill-emacs nil)
-
+#+end_src
+** Font
+Variable pitch font used for Org Mode.
+#+begin_src elisp
 ;; set font
 (setq doom-font (font-spec :family "Input Mono" :size 14 :weight 'normal)
       doom-variable-pitch-font (font-spec :family "Corbert" :size 17))
-
+#+end_src
+** Theme
+#+begin_src elisp
 ;; overall theme
 (setq doom-theme 'doom-one)
 ;; treemacs theme
@@ -14,15 +25,22 @@
 (setq doom-themes-treemacs-enable-variable-pitch nil)
 ;; log in splash image
 (setq fancy-splash-image "~/.doom.d/splash/splash.png")
-
+#+end_src
+** Line number
+#+begin_src elisp
 ;; default to absolute
 (setq display-line-numbers-type t)
-
+#+end_src
+* Projectile
+#+begin_src elisp
 ;; set project root
 (setq projectile-project-search-path
       '("~/.doom.d",
         "~/Documents/Learning/programming-rust"))
-
+#+end_src
+* LSP
+** UI
+#+begin_src elisp
 (use-package! lsp-ui
   :after lsp-mode
   :commands lsp-ui-mode
@@ -33,14 +51,22 @@
   (lsp-ui-sideline-ignore-duplicate t)
   ;; show hover info on sideline
   (lsp-ui-sideline-show-hover t))
-
+#+end_src
+** Languages
+*** Rust
+#+begin_src elisp
 (after! rustic
   (setq rustic-lsp-server 'rls))
-
+#+end_src
+* Org
+** Root directories
+#+begin_src elisp
 ;; set org mode root
 (setq org-directory "~/org/")
 (setq org-agenda-files '("~/org"))
-
+#+end_src
+** Hooks
+#+begin_src elisp
 (defun ays/org-mode-hook-setup ()
   ;; enable variable pitch for text
   (variable-pitch-mode t)
@@ -49,7 +75,10 @@
   ;; disable company autocomplete
   (remove-hook 'after-change-major-mode-hook '+company-init-backends-h)
   (setq-local company-backends nil))
-
+#+end_src
+** Appearance
+*** Variable-pitch headings
+#+begin_src elisp
 (defun ays/org-font-setup ()
   ;; Set faces for heading levels
   (dolist (face '((org-level-1 . 1.5)
@@ -61,25 +90,34 @@
                   (org-level-7 . 1.0)
                   (org-level-8 . 1.0)))
     (set-face-attribute (car face) nil :font "Corbert" :height (cdr face) :weight 'bold)))
-
+#+end_src
+*** Heading bullets
+#+begin_src elisp
 (use-package! org-bullets
   :after org
   :hook (org-mode . org-bullets-mode)
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-
+#+end_src
+*** Mixed-pitch
+Set code blocks / properties / etc. as fixed-pitch
+#+begin_src elisp
 (use-package! mixed-pitch
   :hook (org-mode . mixed-pitch-mode)
   :config
   (setq mixed-pitch-set-height t))
-
+#+end_src
+*** Center window
+#+begin_src elisp
 (defun ays/org-mode-visual-fill ()
   (setq visual-fill-column-width 100
         visual-fill-column-center-text t)
   (visual-fill-column-mode 1))
 (use-package visual-fill-column
   :hook (org-mode . ays/org-mode-visual-fill))
-
+#+end_src
+** Main Config
+#+begin_src elisp
 (use-package! org
   ;; apply hooks
   :hook (org-mode . ays/org-mode-hook-setup)
@@ -128,7 +166,10 @@
 
   ;; fonts
   (ays/org-font-setup))
-
+#+end_src
+** Babel
+*** Load languages
+#+begin_src elisp
 (org-babel-do-load-languages
   'org-babel-load-languages '((elisp . t)
                               (python . t)
@@ -136,9 +177,13 @@
                               (sql . t)
                               (js . t)))
 
+#+end_src
+*** Structure templates
+#+begin_src elisp
 (require 'org-tempo)
 (add-to-list 'org-structure-template-alist '("el" . "src elisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
 (add-to-list 'org-structure-template-alist '("sql" . "src sql"))
 (add-to-list 'org-structure-template-alist '("js" . "src js"))
+#+end_src
