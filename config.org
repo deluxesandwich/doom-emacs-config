@@ -35,8 +35,7 @@ Variable pitch font used for Org Mode.
 #+begin_src elisp
 ;; set project root
 (setq projectile-project-search-path
-      '("~/.doom.d",
-        "~/Documents/Learning/programming-rust"))
+      '("~/Documents/Learning/programming-rust"))
 #+end_src
 * LSP
 ** UI
@@ -176,7 +175,8 @@ Set code blocks / properties / etc. as fixed-pitch
                               (shell . t)
                               (sql . t)
                               (js . t)))
-
+;; add conf to source langs
+(push '("conf-unix" . conf-unix) org-src-lang-modes)
 #+end_src
 *** Structure templates
 #+begin_src elisp
@@ -186,4 +186,15 @@ Set code blocks / properties / etc. as fixed-pitch
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
 (add-to-list 'org-structure-template-alist '("sql" . "src sql"))
 (add-to-list 'org-structure-template-alist '("js" . "src js"))
+#+end_src
+*** Auto-export config
+#+begin_src elisp
+(defun ays/org-babel-tangle-config ()
+  (when (string-equal (buffer-file-name)
+                      (expand-file-name "~/.doom.d/config.org"))
+    ;; Dynamic scoping to the rescue
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ays/org-babel-tangle-config)))
 #+end_src

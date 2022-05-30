@@ -20,8 +20,7 @@
 
 ;; set project root
 (setq projectile-project-search-path
-      '("~/.doom.d",
-        "~/Documents/Learning/programming-rust"))
+      '("~/Documents/Learning/programming-rust"))
 
 (use-package! lsp-ui
   :after lsp-mode
@@ -135,6 +134,8 @@
                               (shell . t)
                               (sql . t)
                               (js . t)))
+;; add conf to source langs
+(push '("conf-unix" . conf-unix) org-src-lang-modes)
 
 (require 'org-tempo)
 (add-to-list 'org-structure-template-alist '("el" . "src elisp"))
@@ -142,3 +143,12 @@
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
 (add-to-list 'org-structure-template-alist '("sql" . "src sql"))
 (add-to-list 'org-structure-template-alist '("js" . "src js"))
+
+(defun ays/org-babel-tangle-config ()
+  (when (string-equal (buffer-file-name)
+                      (expand-file-name "~/.doom.d/config.org"))
+    ;; Dynamic scoping to the rescue
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ays/org-babel-tangle-config)))
