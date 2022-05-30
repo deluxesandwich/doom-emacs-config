@@ -152,3 +152,15 @@
       (org-babel-tangle))))
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ays/org-babel-tangle-config)))
+
+(map! :leader
+      :desc "Query replace"
+      "c r" #'anzu-query-replace)
+
+(map! :leader
+      :desc "Query replace regex"
+      "c R" #'anzu-query-replace-regexp)
+
+(map! :leader
+      :desc "Search project rg"
+      "s p" #'counsel-projectile-rg)

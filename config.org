@@ -198,3 +198,21 @@ Set code blocks / properties / etc. as fixed-pitch
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ays/org-babel-tangle-config)))
 #+end_src
+* Keybindings
+** Buffer search replace (SPC c [r, R])
+#+begin_src elisp
+(map! :leader
+      :desc "Query replace"
+      "c r" #'anzu-query-replace)
+
+(map! :leader
+      :desc "Query replace regex"
+      "c R" #'anzu-query-replace-regexp)
+#+end_src
+** Ivy (counsel) project wide search (SPC s p)
+override default project search with ivy
+#+begin_src elisp
+(map! :leader
+      :desc "Search project rg"
+      "s p" #'counsel-projectile-rg)
+#+end_src
