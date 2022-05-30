@@ -210,9 +210,15 @@ Set code blocks / properties / etc. as fixed-pitch
       "c R" #'anzu-query-replace-regexp)
 #+end_src
 ** Ivy (counsel) project wide search (SPC s p)
-override default project search with ivy
+Override default project search with ivy
 #+begin_src elisp
 (map! :leader
       :desc "Search project rg"
       "s p" #'counsel-projectile-rg)
 #+end_src
+Example workflow:
+| command               | description           | keybinding |
+| counsel-projectile-rg | project wide search   | SPC s p    |
+| +ivy/woccur           | open editable buffer  | C-c C-e    |
+| anzu-query-replace    | buffer search replace | SPC c r    |
+| wgrep-finish-edit     | apply changes         | C-c C-e    |
