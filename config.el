@@ -5,7 +5,7 @@
 
 ;; set font
 (setq doom-font (font-spec :family "Input Mono" :size 14 :weight 'normal)
-      doom-variable-pitch-font (font-spec :family "Corbert" :size 17))
+      doom-variable-pitch-font (font-spec :family "Corbert" :size 15))
 
 ;; overall theme
 (setq doom-theme 'doom-one)
@@ -36,6 +36,8 @@
 (after! rustic
   (setq rustic-lsp-server 'rls))
 
+(add-hook! 'sql-mode-hook #'sqlup-mode)
+
 ;; set org mode root
 (setq org-directory "~/org/")
 (setq org-agenda-files '("~/org"))
@@ -51,10 +53,10 @@
 
 (defun ays/org-font-setup ()
   ;; Set faces for heading levels
-  (dolist (face '((org-level-1 . 1.5)
-                  (org-level-2 . 1.4)
-                  (org-level-3 . 1.3)
-                  (org-level-4 . 1.2)
+  (dolist (face '((org-level-1 . 1.4)
+                  (org-level-2 . 1.3)
+                  (org-level-3 . 1.2)
+                  (org-level-4 . 1.1)
                   (org-level-5 . 1.05)
                   (org-level-6 . 1.0)
                   (org-level-7 . 1.0)
@@ -65,7 +67,7 @@
   :after org
   :hook (org-mode . org-bullets-mode)
   :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+  (org-bullets-bullet-list '("○" "●" "✹" "✶" "✦" "✧" "▽" "▼")))
 
 (use-package! mixed-pitch
   :hook (org-mode . mixed-pitch-mode)
@@ -151,7 +153,8 @@
     (let ((org-confirm-babel-evaluate nil))
       (org-babel-tangle))))
 
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ays/org-babel-tangle-config)))
+(add-hook 'org-mode-hook
+          (lambda () (add-hook 'after-save-hook #'ays/org-babel-tangle-config)))
 
 (map! :leader
       :desc "Query replace"

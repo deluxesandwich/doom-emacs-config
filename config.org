@@ -14,7 +14,7 @@ Variable pitch font used for Org Mode.
 #+begin_src elisp
 ;; set font
 (setq doom-font (font-spec :family "Input Mono" :size 14 :weight 'normal)
-      doom-variable-pitch-font (font-spec :family "Corbert" :size 17))
+      doom-variable-pitch-font (font-spec :family "Corbert" :size 15))
 #+end_src
 ** Theme
 #+begin_src elisp
@@ -57,6 +57,10 @@ Variable pitch font used for Org Mode.
 (after! rustic
   (setq rustic-lsp-server 'rls))
 #+end_src
+*** SQL
+#+begin_src elisp
+(add-hook! 'sql-mode-hook #'sqlup-mode)
+#+end_src
 * Org
 ** Root directories
 #+begin_src elisp
@@ -80,15 +84,16 @@ Variable pitch font used for Org Mode.
 #+begin_src elisp
 (defun ays/org-font-setup ()
   ;; Set faces for heading levels
-  (dolist (face '((org-level-1 . 1.5)
-                  (org-level-2 . 1.4)
-                  (org-level-3 . 1.3)
-                  (org-level-4 . 1.2)
+  (dolist (face '((org-level-1 . 1.4)
+                  (org-level-2 . 1.3)
+                  (org-level-3 . 1.2)
+                  (org-level-4 . 1.1)
                   (org-level-5 . 1.05)
                   (org-level-6 . 1.0)
                   (org-level-7 . 1.0)
                   (org-level-8 . 1.0)))
     (set-face-attribute (car face) nil :font "Corbert" :height (cdr face) :weight 'bold)))
+
 #+end_src
 *** Heading bullets
 #+begin_src elisp
@@ -96,7 +101,7 @@ Variable pitch font used for Org Mode.
   :after org
   :hook (org-mode . org-bullets-mode)
   :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+  (org-bullets-bullet-list '("○" "●" "✹" "✶" "✦" "✧" "▽" "▼")))
 #+end_src
 *** Mixed-pitch
 Set code blocks / properties / etc. as fixed-pitch
@@ -196,7 +201,8 @@ Set code blocks / properties / etc. as fixed-pitch
     (let ((org-confirm-babel-evaluate nil))
       (org-babel-tangle))))
 
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ays/org-babel-tangle-config)))
+(add-hook 'org-mode-hook
+          (lambda () (add-hook 'after-save-hook #'ays/org-babel-tangle-config)))
 #+end_src
 * Keybindings
 ** Buffer search replace (SPC c [r, R])
@@ -216,6 +222,7 @@ Override default project search with ivy
       :desc "Search project rg"
       "s p" #'counsel-projectile-rg)
 #+end_src
+
 Example workflow:
 | command               | description           | keybinding |
 | counsel-projectile-rg | project wide search   | SPC s p    |
